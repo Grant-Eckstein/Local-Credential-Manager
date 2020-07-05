@@ -1,9 +1,7 @@
-package ssh
+package key
 
 import (
 	"fmt"
-	"local_cred_manager/cmd/ssh/config"
-	"local_cred_manager/cmd/ssh/key"
 	"log"
 	"os"
 	"path/filepath"
@@ -13,14 +11,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Ssh is largely clerical, will link sub commands here
+// Key is largely clerical, will link sub commands here
 var (
 	debug = false
 
-	Ssh = &cobra.Command{
-		Use: "ssh",
-		Short: "A profiling system for SSH systems",
-		Long:  "A profiling system for SSH systems",
+	Key = &cobra.Command{
+		Use: "key",
+		Short: "A profiling system for the current SSH key pair",
+		Long:  "A profiling system for the current SSH key pair",
 		Run: func(cmd *cobra.Command, args []string) {
 			// If nothing is specified print help
 			// This is because I want a uniform CLI,
@@ -33,20 +31,15 @@ var (
 	}
 )
 
-func init() {
-	Ssh.AddCommand(config.Config)
-	Ssh.AddCommand(key.Key)
-}
-
 // Execute is called on by the main process
 func Execute() {
 	cobra.OnInitialize(initConfig)
 
 	// Debug - Add global flag
-	Ssh.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Show debugging information")
+	Key.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Show debugging information")
 
 	// Print errors
-	if err := Ssh.Execute(); err != nil {
+	if err := Key.Execute(); err != nil {
 		log.Fatalln(err)
 	}
 }
@@ -63,7 +56,7 @@ func initConfig() {
 		}
 
 		viper.AddConfigPath(dir)
-		viper.SetConfigName("profiles")
+		viper.SetConfigName("keys")
 		viper.SetConfigType("yaml")
 		viper.AutomaticEnv()
 
@@ -86,7 +79,7 @@ func initConfig() {
 	// Debug - notify on configuration change
 	if debug {
 		viper.OnConfigChange(func(e fsnotify.Event) {
-			fmt.Println("Config file changed:", e.Name, e.Op)
+			fmt.Println("Key file changed:", e.Name, e.Op)
 		})
 	}
 }

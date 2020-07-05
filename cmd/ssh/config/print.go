@@ -1,4 +1,4 @@
-package ssh
+package config
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	Ssh.AddCommand(Display)
+	Config.AddCommand(Display)
 }
 
 var (

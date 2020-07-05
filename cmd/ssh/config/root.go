@@ -1,9 +1,7 @@
-package ssh
+package config
 
 import (
 	"fmt"
-	"local_cred_manager/cmd/ssh/config"
-	"local_cred_manager/cmd/ssh/key"
 	"log"
 	"os"
 	"path/filepath"
@@ -13,14 +11,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Ssh is largely clerical, will link sub commands here
+// Config is largely clerical, will link sub commands here
 var (
 	debug = false
 
-	Ssh = &cobra.Command{
-		Use: "ssh",
-		Short: "A profiling system for SSH systems",
-		Long:  "A profiling system for SSH systems",
+	Config = &cobra.Command{
+		Use: "config",
+		Short: "A profiling system for the SSH config file",
+		Long:  "A profiling system for the SSH config file",
 		Run: func(cmd *cobra.Command, args []string) {
 			// If nothing is specified print help
 			// This is because I want a uniform CLI,
@@ -33,20 +31,15 @@ var (
 	}
 )
 
-func init() {
-	Ssh.AddCommand(config.Config)
-	Ssh.AddCommand(key.Key)
-}
-
 // Execute is called on by the main process
 func Execute() {
 	cobra.OnInitialize(initConfig)
 
 	// Debug - Add global flag
-	Ssh.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Show debugging information")
+	Config.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Show debugging information")
 
 	// Print errors
-	if err := Ssh.Execute(); err != nil {
+	if err := Config.Execute(); err != nil {
 		log.Fatalln(err)
 	}
 }

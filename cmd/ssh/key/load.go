@@ -1,4 +1,4 @@
-package ssh
+package key
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	Ssh.AddCommand(Load)
+	Key.AddCommand(Load)
 }
 
 var (
@@ -24,13 +24,11 @@ var (
 			name := args[0]
 			if err := viper.ReadInConfig(); err == nil {
 				if h, err := os.UserHomeDir(); err == nil {
-					config_file := filepath.Join(h, ".ssh", "config")
+					private_key_file := filepath.Join(h, ".ssh", "id_rsa")
+					public_key_file := filepath.Join(h, ".ssh", "id_rsa.pub")
+					auth_keys := filepath.Join(h, ".ssh", "authorized_keys")
+					known_hosts := filepath.Join(h, ".ssh", "known_hosts")
 					profile_contents := viper.GetString(name)
-					if err := ioutil.WriteFile(config_file, []byte(profile_contents), 500); err == nil {
-						fmt.Println("Successfully loaded new profile!")
-					} else {
-						log.Fatalln(err)
-					}
 				} else {
 					log.Fatalln(err)
 				}

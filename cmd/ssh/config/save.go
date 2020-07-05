@@ -1,4 +1,4 @@
-package ssh
+package config
 
 import (
 	"github.com/spf13/cobra"
@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	Ssh.AddCommand(New)
+	Config.AddCommand(New)
 }
 
 var (
